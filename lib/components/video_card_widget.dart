@@ -33,7 +33,6 @@ class VideoCardWidget extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      log("vd ${selectedVideoController.selectedVideo}");
                       selectedVideoController.setSelectedVideo(video);
                       miniplayerController.animateToHeight(
                           state: PanelState.MAX);

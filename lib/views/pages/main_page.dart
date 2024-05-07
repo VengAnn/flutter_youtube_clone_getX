@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:miniplayer/miniplayer.dart';
@@ -7,6 +9,7 @@ import 'package:youtube_clone/data/data.dart';
 import 'package:youtube_clone/utils/constant_color.dart';
 import 'package:youtube_clone/utils/dimension.dart';
 import 'package:youtube_clone/views/pages/home_page.dart';
+import 'package:youtube_clone/views/pages/video_detail_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -78,16 +81,93 @@ class _MainPageState extends State<MainPage> {
                     minHeight: Dimensions.height20 * 3,
                     maxHeight: MediaQuery.of(context).size.height,
                     builder: (height, percentage) {
+                      log("value :${selectedVideoController.selectedVideo}");
                       if (selectedVideoController.selectedVideo == null) {
                         return const SizedBox();
+                      } else {
+                        // otherwise !null show whateve i want this
+
+                        //check if height is > min height + 50 show Video Detail screen
+                        if (height > Dimensions.height20 * 3) {
+                          return const VideoDetailPage();
+                        }
+                        // otherwise show if height is < Dimensions.height20 * 3 show minim player
+                        return Container(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: Dimensions.width20 * 6,
+                                    height: Dimensions.height20 * 2.7,
+                                    color: Colors.amber,
+                                  ),
+                                  //
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        left: Dimensions.width5,
+                                      ),
+                                      child: const Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                          // text name channel
+                                          Text(
+                                            "MusicKh",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: ConstantColor.colorgrey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  //icon play
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.play_arrow,
+                                      color: ConstantColor.colorWhite,
+                                      size: Dimensions.width20,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                  //icon close
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: ConstantColor.colorWhite,
+                                      size: Dimensions.width20,
+                                    ),
+                                    onPressed: () {
+                                      selectedVideoController
+                                          .setSelectedVideo(null);
+                                    },
+                                  ),
+                                ],
+                              ),
+                              const LinearProgressIndicator(
+                                value: 0.4,
+                                valueColor: AlwaysStoppedAnimation(
+                                  Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       }
-                      // otherwise show
-                      return Container(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        child: Center(
-                          child: Text("$height $percentage"),
-                        ),
-                      );
                     },
                   ),
                 ),
@@ -100,7 +180,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           Container(
             padding: EdgeInsets.zero,
-            //color: Colors.amber,
+            color: Theme.of(context).scaffoldBackgroundColor,
             width: Dimensions.screenWidth,
             height: Dimensions.height20 * 3.2,
             child: Stack(
